@@ -375,9 +375,13 @@ function getFalsyValuesCount(/* arr */) {
  *    [ true, 0, 1, 'true' ], true => 1
  */
 function findAllOccurences(/* arr, item */) {
+  /* let res = 0;
+  arr.reduce((el) => {
+    el === item ? res += 1 : res += 0;
+  });
+  return res; */
   throw new Error('Not implemented');
 }
-
 /**
  * Concatenates all elements from specified array into single string with ',' delimeter
  *
@@ -389,8 +393,8 @@ function findAllOccurences(/* arr, item */) {
  *    [1, 2, 3, 4, 5]                   => '1,2,3,4,5'
  *    ['rock', 'paper', 'scissors']     => 'rock,paper,scissors'
  */
-function toStringList(/* arr */) {
-  throw new Error('Not implemented');
+function toStringList(arr) {
+  return arr.join(',');
 }
 
 
