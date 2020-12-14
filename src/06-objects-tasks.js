@@ -38,7 +38,6 @@ function Rectangle(width, height) {
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
 function getJSON(obj) {
-  // throw new Error('Not implemented');
   return JSON.stringify(obj);
 }
 
@@ -54,11 +53,11 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
-  // return Object.create(proto, JSON.parse(json));
-}
+function fromJSON(proto, json) {
+  const values = Object.values(JSON.parse(json));
 
+  return new proto.constructor(...values);
+}
 
 /**
  * Css selectors builder
@@ -115,32 +114,92 @@ function fromJSON(/* proto, json */) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  resStr: '',
+  element(value) {
+    const selector = {};
+    // eslint-disable-next-line no-proto
+    selector.__proto__ = cssSelectorBuilder;
+    selector.resStr = `${value}`;
+    selector.order = 1;
+    this.checkRepeat(selector.order);
+    this.checkOrder(selector.order);
+    return selector;
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    const selector = {};
+    // eslint-disable-next-line no-proto
+    selector.__proto__ = cssSelectorBuilder;
+    selector.resStr = `${this.resStr}#${value}`;
+    selector.order = 2;
+    this.checkRepeat(selector.order);
+    this.checkOrder(selector.order);
+    return selector;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    const selector = {};
+    // eslint-disable-next-line no-proto
+    selector.__proto__ = cssSelectorBuilder;
+    selector.resStr = `${this.resStr}.${value}`;
+    selector.order = 3;
+    this.checkOrder(selector.order);
+    return selector;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    const selector = {};
+    // eslint-disable-next-line no-proto
+    selector.__proto__ = cssSelectorBuilder;
+    selector.resStr = `${this.resStr}[${value}]`;
+    selector.order = 4;
+    this.checkOrder(selector.order);
+    return selector;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    const selector = {};
+    // eslint-disable-next-line no-proto
+    selector.__proto__ = cssSelectorBuilder;
+    selector.resStr = `${this.resStr}:${value}`;
+    selector.order = 5;
+    this.checkOrder(selector.order);
+    return selector;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    const selector = {};
+    // eslint-disable-next-line no-proto
+    selector.__proto__ = cssSelectorBuilder;
+    selector.resStr = `${this.resStr}::${value}`;
+    selector.order = 6;
+    this.checkRepeat(selector.order);
+    this.checkOrder(selector.order);
+    return selector;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    const selector = {};
+    // eslint-disable-next-line no-proto
+    selector.__proto__ = cssSelectorBuilder;
+    selector.resStr = `${selector1.resStr} ${combinator} ${selector2.resStr}`;
+    return selector;
+  },
+
+  stringify() {
+    return this.resStr;
+  },
+
+  checkRepeat(order) {
+    if (this.order === order) {
+      throw Error('Element, id and pseudo-element should not occur more then one time inside the selector');
+    }
+  },
+
+  checkOrder(order) {
+    if (this.order > order) {
+      throw Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    }
   },
 };
 
