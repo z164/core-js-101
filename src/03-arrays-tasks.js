@@ -374,13 +374,8 @@ function getFalsyValuesCount(/* arr */) {
  *    [ null, undefined, null ], null => 2
  *    [ true, 0, 1, 'true' ], true => 1
  */
-function findAllOccurences(/* arr, item */) {
-  /* let res = 0;
-  arr.reduce((el) => {
-    el === item ? res += 1 : res += 0;
-  });
-  return res; */
-  throw new Error('Not implemented');
+function findAllOccurences(arr, item) {
+  return arr.filter((el) => el === item).length;
 }
 /**
  * Concatenates all elements from specified array into single string with ',' delimeter
